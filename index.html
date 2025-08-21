@@ -1,0 +1,792 @@
+```html
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NexaRaya - Berita yang Mengalir, Gagasan yang Menggema</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #121212;
+      --card-bg: #1A1A1A;
+      --text: #E0E0E0;
+      --text-secondary: #999;
+      --border: #2A2A2A;
+      --cyan: #00F5D4;
+      --shadow: 0 8px 24px rgba(0, 245, 212, 0.08);
+      --shadow-light: 0 4px 12px rgba(0,0,0,0.1);
+      --radius: 12px;
+    }
+
+    .light-mode {
+      --bg: #F8F8F8;
+      --card-bg: #FFFFFF;
+      --text: #333;
+      --text-secondary: #555;
+      --border: #DDD;
+      --shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+      --shadow-light: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      transition: background 0.4s ease, color 0.4s ease;
+    }
+
+    /* =============== HEADER =============== */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 20px;
+      height: 60px;
+      background: var(--bg);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hamburger {
+      display: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: white;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.1);
+      margin-right: 12px;
+      transition: background 0.3s;
+    }
+
+    .hamburger:hover {
+      background: rgba(255,255,255,0.2);
+    }
+
+    .logo {
+      font-weight: 900;
+      font-size: 20px;
+      color: white;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .logo span {
+      color: var(--cyan);
+    }
+
+    nav {
+      display: flex;
+      gap: 24px;
+      margin-left: 32px;
+    }
+
+    nav a {
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 14px;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: var(--cyan);
+    }
+
+    .icons {
+      display: flex;
+      gap: 16px;
+      font-size: 18px;
+    }
+
+    .icons span {
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    /* =============== HERO =============== */
+    .hero {
+      display: flex;
+      height: 500px;
+      color: white;
+    }
+
+    .hero-left {
+      width: 60%;
+      position: relative;
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+    .hero-left::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.3), var(--bg));
+      z-index: 1;
+    }
+
+    .hero-left img {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+    }
+
+    .hero-left h1 {
+      font-size: 28px;
+      font-weight: 900;
+      z-index: 2;
+    }
+
+    .hero-left p {
+      font-size: 16px;
+      color: var(--text-secondary);
+      margin: 8px 0;
+      z-index: 2;
+    }
+
+    .category-tag {
+      background: #1A73E8;
+      color: white;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 12px;
+      display: inline-block;
+      margin-bottom: 12px;
+      z-index: 2;
+    }
+
+    .btn {
+      padding: 8px 16px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+      display: inline-block;
+      margin-right: 8px;
+    }
+
+    .btn-primary {
+      background: var(--cyan);
+      color: #121212;
+    }
+
+    .btn-outline {
+      border: 1px solid var(--cyan);
+      color: var(--cyan);
+      background: transparent;
+    }
+
+    .hero-right {
+      width: 40%;
+      padding: 30px;
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(10px);
+    }
+
+    .ticker {
+      background: rgba(0,0,0,0.3);
+      padding: 10px;
+      border-radius: 8px;
+      white-space: nowrap;
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+
+    .ticker-content {
+      display: inline-block;
+      animation: scroll-left 20s linear infinite;
+      color: white;
+      font-size: 13px;
+    }
+
+    @keyframes scroll-left {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
+    }
+
+    .poll-box, .sentiment-widget, .ad-banner {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 16px;
+    }
+
+    .poll-question, .sentiment-widget h4 {
+      color: var(--text);
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .progress {
+      display: flex;
+      height: 6px;
+      border-radius: 3px;
+      overflow: hidden;
+      margin: 6px 0;
+    }
+
+    .progress-yes {
+      width: 48%;
+      background: var(--cyan);
+    }
+
+    .progress-no {
+      width: 52%;
+      background: #FF6B6B;
+    }
+
+    .sentiment-item p {
+      margin: 4px 0;
+      color: var(--text-secondary);
+      font-size: 13px;
+    }
+
+    .sentiment-item strong {
+      color: white;
+    }
+
+    .sentiment-item span {
+      margin-left: 8px;
+      font-size: 12px;
+    }
+
+    .sentiment-item span[style*="00F5D4"] { color: var(--cyan); }
+    .sentiment-item span[style*="FF6B6B"] { color: #FF6B6B; }
+
+    .tabs {
+      display: flex;
+      gap: 24px;
+      padding: 0 20px;
+      height: 50px;
+      align-items: center;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 60px;
+      z-index: 90;
+    }
+
+    .tabs a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .tabs a:first-child {
+      color: var(--text);
+    }
+
+    .tabs a:first-child::after {
+      content: '';
+      position: absolute;
+      bottom: -26px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--cyan);
+    }
+
+    /* =============== HIGH IMPACT AD =============== */
+    .ad-video-banner {
+      padding: 20px 40px;
+      text-align: center;
+    }
+
+    .ad-video {
+      background: linear-gradient(135deg, #1A1A1A 0%, #2D2D2D 100%);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      border: 1px dashed var(--cyan);
+    }
+
+    .ad-video h3 {
+      color: var(--cyan);
+      font-size: 14px;
+      margin: 0;
+    }
+
+    .ad-video p {
+      margin: 4px 0;
+      font-size: 13px;
+      color: #999;
+    }
+
+    .ad-video img {
+      width: 160px;
+      height: 90px;
+      border-radius: 8px;
+      object-fit: cover;
+    }
+
+    /* =============== GRID =============== */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      padding: 30px;
+    }
+
+    .card {
+      position: relative;
+      height: 200px;
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: var(--card-bg);
+      transition: transform 0.3s, box-shadow 0.3s;
+      box-shadow: var(--shadow);
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-light);
+    }
+
+    .card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .card-tag {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: #1A73E8;
+      color: white;
+      padding: 3px 6px;
+      border-radius: 4px;
+      font-size: 11px;
+    }
+
+    .card-content {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 12px;
+      background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+      color: white;
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin: 0 0 4px 0;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .card-meta {
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+
+    /* =============== SHORTS =============== */
+    .shorts {
+      padding: 20px 40px;
+    }
+
+    .shorts h2 {
+      color: var(--cyan);
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .shorts-container {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding: 8px 0;
+    }
+
+    .short-card {
+      min-width: 140px;
+      height: 220px;
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .short-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .short-duration {
+      position: absolute;
+      bottom: 6px;
+      right: 6px;
+      background: rgba(0,0,0,0.7);
+      color: white;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 11px;
+    }
+
+    /* =============== RESPONSIVE =============== */
+    @media (max-width: 1024px) {
+      .hero { flex-direction: column; height: auto; }
+      .hero-left, .hero-right { width: 100%; }
+      .hero-left { height: 300px; }
+    }
+
+    @media (max-width: 768px) {
+      header {
+        justify-content: space-between;
+        padding: 0 16px;
+      }
+
+      .hamburger {
+        display: block;
+        order: 1;
+      }
+
+      .logo {
+        order: 2;
+        font-size: 18px;
+        margin: 0;
+      }
+
+      nav {
+        display: none;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        width: 100%;
+        background: var(--bg);
+        flex-direction: column;
+        padding: 10px 0;
+        border-bottom: 1px solid var(--border);
+        z-index: 99;
+      }
+
+      nav.show {
+        display: flex;
+      }
+
+      nav a {
+        margin: 6px 20px;
+      }
+
+      .icons {
+        order: 3;
+        display: flex;
+        gap: 16px;
+      }
+
+      .grid, .hero, .shorts, footer {
+        padding: 20px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .tabs {
+        padding: 0 20px;
+      }
+    }
+  </style>
+</head>
+<body class="light-mode">
+
+  <!-- HEADER -->
+  <header>
+    <div class="hamburger" onclick="document.getElementById('main-nav').classList.toggle('show')">☰</div>
+    <a href="/" class="logo">Nexa<span>Raya</span></a>
+    <div class="icons">
+      <span id="search-icon">🔍</span>
+      <span id="dark-mode-toggle">🌙</span>
+    </div>
+  </header>
+
+  <!-- SEARCH OVERLAY -->
+  <div id="search-overlay" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:200;display:none;align-items:center;justify-content:center;flex-direction:column;padding:20px;">
+    <input type="text" id="search-input" placeholder="Cari berita, topik, atau kategori..." style="width:90%;max-width:500px;padding:14px;border:1px solid #00F5D4;background:#1A1A1A;color:white;font-size:16px;border-radius:8px;margin-bottom:20px;">
+    <div id="search-results" style="width:90%;max-width:500px;color:#ccc;text-align:left;"></div>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-left">
+      <img src="https://via.placeholder.com/1200x600/1A1A1A/FFFFFF?text=AI+Innovation" alt="Cover">
+      <div class="content" style="position:relative;z-index:2;">
+        <span class="category-tag">🤖 Tech & Future</span>
+        <h1>Indonesia Masuk 10 Besar Inovasi AI Dunia – Ini Strateginya</h1>
+        <p>Sebuah laporan global menempatkan Indonesia di posisi ke-9 dalam indeks inovasi teknologi 2025.</p>
+        <div style="background:rgba(0,245,212,0.1);border-left:3px solid var(--cyan);padding:10px 12px;margin:10px 0;border-radius:0 6px 6px 0;font-size:13px;">
+          <strong>🧠 Ringkasan AI:</strong> Indonesia naik 5 peringkat karena fokus pada talenta digital dan kolaborasi riset. Strategi pemerintah dorong startup AI di sektor kesehatan dan pertanian. Laporan 2025 prediksi lonjakan investasi asing.
+        </div>
+        <a href="article.html" class="btn btn-primary">Baca Sekarang</a>
+        <a href="#" class="btn btn-outline" onclick="openAudioModal('Indonesia Masuk 10 Besar Inovasi AI')">🎧 Dengarkan</a>
+      </div>
+    </div>
+    <div class="hero-right">
+      <!-- Live Poll -->
+      <div class="poll-box">
+        <div class="poll-question">Menurutmu, apakah AI akan menggantikan wartawan?</div>
+        <div class="progress">
+          <div class="progress-yes"></div>
+          <div class="progress-no"></div>
+        </div>
+      </div>
+
+      <!-- Sentimen Publik -->
+      <div class="sentiment-widget">
+        <h4>💬 Sentimen Publik</h4>
+        <div class="sentiment-item">
+          <p><strong>@wargaJakarta</strong> di X: "AI bagus, tapi jangan sampai ganti pekerja nyata."<span style="color:var(--cyan);margin-left:8px;">👍 1.2K</span></p>
+        </div>
+        <div class="sentiment-item">
+          <p><strong>r/IndonesiaTech</strong> di Reddit: "Startup lokal ini punya potensi besar."<span style="color:#FF6B6B;margin-left:8px;">🔥 890</span></p>
+        </div>
+        <a href="#" style="color:var(--cyan);font-size:13px;text-decoration:none;">Lihat lebih banyak →</a>
+      </div>
+
+      <!-- Iklan Sidebar -->
+      <a href="/iklan" class="ad-banner">
+        <div style="color:var(--cyan);font-weight:600;">📢 Iklan 300x250</div>
+        <div style="margin-top:8px;color:var(--text-secondary);font-size:13px;">Promosikan produkmu di sini</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- TABS -->
+  <section class="tabs">
+    <a href="#">Terbaru</a>
+    <a href="#">Populer</a>
+    <a href="#">Editor’s Pick</a>
+    <a href="#">Investigasi</a>
+  </section>
+
+  <!-- HIGH IMPACT AD -->
+  <section class="ad-video-banner">
+    <div class="ad-video">
+      <div>
+        <h3>🎥 SPONSORED VIDEO</h3>
+        <p>Tonton: "Masa Depan Startup Indonesia 2025"</p>
+        <p>Disponsori oleh TechFuture Foundation</p>
+      </div>
+      <div style="background:#000;width:160px;height:90px;border-radius:8px;overflow:hidden;position:relative;">
+        <img src="https://via.placeholder.com/160x90/000/FFF?text=Video" alt="Video" style="width:100%;height:100%;object-fit:cover;">
+        <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:white;font-size:24px;">▶️</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GRID -->
+  <section class="grid">
+    <article class="card">
+      <img src="https://via.placeholder.com/340x220/1A1A1A/444444?text=Banjir+Jakarta" alt="Berita">
+      <div class="card-tag">🌍 Lingkungan</div>
+      <div class="card-content">
+        <h3 class="card-title">Banjir Jakarta Diprediksi Makin Parah, Ini Solusi Berbasis AI</h3>
+        <p class="card-meta">2 jam lalu • 12K dibaca</p>
+        <p style="font-size:11px;color:var(--text-secondary);"><strong>🧠 Ringkasan:</strong> AI digunakan untuk prediksi banjir berdasarkan data cuaca dan drainase.</p>
+        <div style="display:flex;justify-content:space-between;margin-top:6px;">
+          <a href="article.html" style="color:var(--text-secondary);font-size:11px;">Baca →</a>
+          <span onclick="openAudioModal('Banjir Jakarta')" style="color:var(--cyan);font-size:11px;cursor:pointer;">🎧 Dengarkan</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <img src="https://via.placeholder.com/340x220/1A1A1A/444444?text=Startup+50M" alt="Feature">
+      <div class="card-tag" style="background:#FF6B6B;">🔥 Eksklusif</div>
+      <div class="card-content">
+        <h3 class="card-title">Startup Lokal Raup $50M di Singapura</h3>
+        <p class="card-meta">1 hari lalu • 24K dibaca</p>
+        <p style="font-size:11px;color:var(--text-secondary);"><strong>🧠 Ringkasan:</strong> Startup fintech Indonesia dapat pendanaan besar dari investor Asia Tenggara.</p>
+        <div style="display:flex;justify-content:space-between;margin-top:6px;">
+          <a href="article.html" style="color:var(--text-secondary);font-size:11px;">Baca →</a>
+          <span onclick="openAudioModal('Startup Lokal')" style="color:var(--cyan);font-size:11px;cursor:pointer;">🎧 Dengarkan</span>
+        </div>
+      </div>
+    </article>
+
+    <!-- Iklan Native -->
+    <article class="card" style="background:var(--card-bg);border:1px solid var(--cyan);text-align:center;display:flex;align-items:center;justify-content:center;position:relative;">
+      <div>
+        <p style="color:var(--cyan);font-weight:600;margin-bottom:4px;">✨ Iklan Premium</p>
+        <p style="color:var(--text-secondary);font-size:12px;">Tampil di posisi utama</p>
+      </div>
+      <div style="position:absolute;top:10px;right:10px;background:#FFD700;color:black;padding:2px 6px;border-radius:4px;font-size:10px;">Ad</div>
+    </article>
+  </section>
+
+  <!-- SHORTS -->
+  <section class="shorts">
+    <h2>🎥 NexaRaya Shorts</h2>
+    <div class="shorts-container">
+      <div class="short-card">
+        <img src="https://via.placeholder.com/160x280/1A1A1A/FFFFFF?text=Short+1" alt="Short">
+        <div class="short-duration">0:32</div>
+      </div>
+      <div class="short-card">
+        <img src="https://via.placeholder.com/160x280/1A1A1A/FFFFFF?text=Short+2" alt="Short">
+        <div class="short-duration">0:45</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer style="background:var(--bg);padding:40px 20px;color:var(--text-secondary);font-size:14px;border-top:1px solid var(--border);">
+    <div style="max-width:1200px;margin:0 auto;display:grid;gap:30px;grid-template-columns:repeat(4,1fr);">
+      <div>
+        <h3 style="color:var(--text);">NexaRaya</h3>
+        <p>Platform berita masa depan yang menggabungkan kedalaman jurnalisme dengan kecepatan digital.</p>
+      </div>
+      <div>
+        <h4 style="color:var(--text);">Navigasi</h4>
+        <a href="#" style="color:var(--text-secondary);display:block;margin:8px 0;text-decoration:none;">Beranda</a>
+        <a href="#" style="color:var(--text-secondary);display:block;margin:8px 0;text-decoration:none;">NexaDeep</a>
+        <a href="#" style="color:var(--text-secondary);display:block;margin:8px 0;text-decoration:none;">Tech & Future</a>
+      </div>
+      <div>
+        <h4 style="color:var(--text);">Tentang</h4>
+        <a href="#" style="color:var(--text-secondary);display:block;margin:8px 0;text-decoration:none;">Tim Kami</a>
+        <a href="#" style="color:var(--text-secondary);display:block;margin:8px 0;text-decoration:none;">Karir</a>
+        <a href="#" style="color:var(--text-secondary);display:block;margin:8px 0;text-decoration:none;">Kontak</a>
+      </div>
+      <div>
+        <h4 style="color:var(--text);">Masukan Anda</h4>
+        <p style="color:var(--text-secondary);font-size:13px;margin-bottom:10px;">Bantu kami menjadi lebih baik.</p>
+        <textarea id="feedback-text" placeholder="Tulis saran atau apresiasi..." rows="3" style="width:100%;padding:8px;background:var(--card-bg);border:1px solid #333;border-radius:6px;color:var(--text);font-size:13px;margin-bottom:10px;"></textarea>
+        <button onclick="submitFeedback()" style="background:var(--cyan);color:#121212;border:none;padding:6px 12px;font-size:13px;border-radius:6px;cursor:pointer;font-weight:600;">Kirim</button>
+        <p id="feedback-status" style="margin-top:8px;font-size:12px;height:16px;color:var(--cyan);"></p>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:30px;padding-top:20px;border-top:1px solid var(--border);font-size:12px;color:var(--text-secondary);">
+      &copy; 2025 NexaRaya. Seluruh hak cipta dilindungi.
+    </div>
+  </footer>
+
+  <!-- AUDIO MODAL -->
+  <div id="audio-modal" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.95);z-index:300;display:none;align-items:center;justify-content:center;flex-direction:column;padding:40px;color:white;text-align:center;">
+    <h3 id="audio-title">Mendengarkan: Artikel</h3>
+    <p style="color:var(--cyan);margin-bottom:20px;">Durasi: 60 detik</p>
+    <audio id="audio-player" controls style="width:80%;max-width:400px;">
+      <source src="https://cdn.pixabay.com/audio/2022/04/06/audio_0c5b1e8a56.mp3" type="audio/mpeg">
+      Browser Anda tidak mendukung audio.
+    </audio>
+    <button onclick="closeAudioModal()" style="margin-top:20px;background:#333;color:white;border:1px solid #555;padding:10px 20px;border-radius:8px;cursor:pointer;">Tutup</button>
+  </div>
+
+  <script>
+    // DOM Elements
+    const searchIcon = document.getElementById('search-icon');
+    const darkModeToggle = document.getElementById('dark-mode-toggle');
+    const searchOverlay = document.getElementById('search-overlay');
+    const searchInput = document.getElementById('search-input');
+
+    // Dark Mode
+    let isDark = localStorage.getItem('darkMode') === 'dark' ? true : 
+                 localStorage.getItem('darkMode') === 'light' ? false : 
+                 window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    function updateDarkMode() {
+      if (isDark) {
+        document.body.classList.remove('light-mode');
+        darkModeToggle.textContent = '🌞';
+        localStorage.setItem('darkMode', 'dark');
+      } else {
+        document.body.classList.add('light-mode');
+        darkModeToggle.textContent = '🌙';
+        localStorage.setItem('darkMode', 'light');
+      }
+    }
+
+    darkModeToggle.addEventListener('click', () => {
+      isDark = !isDark;
+      updateDarkMode();
+    });
+
+    updateDarkMode();
+
+    // Search
+    searchIcon.addEventListener('click', () => {
+      searchOverlay.style.display = 'flex';
+      searchInput.focus();
+    });
+
+    searchInput.addEventListener('input', () => {
+      const q = searchInput.value.toLowerCase();
+      if (q.length === 0) {
+        document.getElementById('search-results').innerHTML = '';
+        return;
+      }
+      const articles = [
+        { title: "Indonesia Masuk 10 Besar Inovasi AI", url: "article.html" },
+        { title: "Startup Lokal Raup $50M", url: "article.html" }
+      ];
+      const results = articles.filter(a => a.title.toLowerCase().includes(q));
+      document.getElementById('search-results').innerHTML = results.length
+        ? results.map(r => `<div style="margin:8px 0"><a href="${r.url}" style="color:#00F5D4">${r.title}</a></div>`).join('')
+        : '<p style="color:#999">Tidak ditemukan</p>';
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') searchOverlay.style.display = 'none';
+    });
+
+    // Audio Modal
+    function openAudioModal(title) {
+      document.getElementById('audio-title').textContent = 'Mendengarkan: ' + title;
+      document.getElementById('audio-modal').style.display = 'flex';
+      document.getElementById('audio-player').play();
+    }
+
+    function closeAudioModal() {
+      document.getElementById('audio-modal').style.display = 'none';
+      document.getElementById('audio-player').pause();
+    }
+
+    // Feedback
+    function submitFeedback() {
+      const text = document.getElementById('feedback-text').value.trim();
+      const status = document.getElementById('feedback-status');
+      if (!text) {
+        status.textContent = 'Harap isi masukan.';
+        status.style.color = '#FF6B6B';
+        return;
+      }
+      status.textContent = 'Terima kasih! Masukanmu berharga.';
+      document.getElementById('feedback-text').value = '';
+      setTimeout(() => { status.textContent = ''; }, 3000);
+    }
+  </script>
+</body>
+</html>
+```
